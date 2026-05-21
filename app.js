@@ -1,13 +1,13 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: "AIzaSyCGqrrcKahUtg1UfOyjBisbc4e_vb49Rtg",
+  authDomain: "proj1-f8878.firebaseapp.com",
+  projectId: "proj1-f8878",
+  storageBucket: "proj1-f8878.firebasestorage.app",
+  messagingSenderId: "259555764950",
+  appId: "1:259555764950:web:d420a9945a39745f2cf777"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -193,11 +193,55 @@ document.getElementById("deleteBtn").onclick = async () => {
 document.getElementById("refreshBtn").onclick = refreshAll;
 document.getElementById("cancelBtn").onclick = () => document.getElementById("recordDialog").close();
 document.getElementById("closeViewBtn").onclick = () => document.getElementById("viewDialog").close();
+document.getElementById("addBtn").onclick = () => {
+    state.editing = null;
+    renderFields();
+    document.getElementById("recordTitle").innerText = "Новая запись";
+    document.getElementById("recordDialog").showModal();
+};
+
+document.getElementById("editBtn").onclick = () => {
+    if (!state.selectedId) return alert("Выберите строку");
+    state.editing = state.rows.find(r => r.id === state.selectedId);
+    renderFields();
+    document.getElementById("recordTitle").innerText = "Редактирование";
+    document.getElementById("recordDialog").showModal();
+};
+
+document.getElementById("viewBtn").onclick = () => {
+    if (!state.selectedId) return alert("Выберите строку");
+    const row = state.rows.find(r => r.id === state.selectedId);
+    let html = "";
+    columns[state.dict].forEach(c => {
+        let val = row[c.key];
+        if (c.type === "date") val = val ? new Date(val).toLocaleDateString("ru-RU") : "—";
+        if (c.type === "ref_multiple") val = (val || []).map(id => state.cancerTypes.find(ct => ct.id === id)?.name).join(", ");
+        html += `<p><strong>${c.label}:</strong> <span>${val || "—"}</span></p>`;
+    });
+    document.getElementById("viewContent").innerHTML = html;
+    document.getElementById("viewDialog").showModal();
+};
+
+document.getElementById("deleteBtn").onclick = async () => {
+    if (!state.selectedId) return alert("Выберите строку");
+    if (confirm("Удалить запись?")) {
+        await deleteDoc(doc(db, state.dict, state.selectedId));
+        state.selectedId = null;
+        refreshAll();
+    }
+};
+
+// Привязка остальных кнопок управления
+document.getElementById("refreshBtn").onclick = refreshAll;
+document.getElementById("cancelBtn").onclick = () => document.getElementById("recordDialog").close();
+document.getElementById("closeViewBtn").onclick = () => document.getElementById("viewDialog").close();
+
+// Смена справочника
 document.getElementById("dictionarySelect").onchange = (e) => {
     state.dict = e.target.value;
     state.selectedId = null;
-    state.sortKey = null;
     refreshAll();
 };
 
+// КРИТИЧЕСКИЙ ВАЖНЫЙ ВЫЗОВ: Запуск приложения при старте страницы
 refreshAll();
