@@ -1,14 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
-// Конфигурация подхватывается из .env (через Vite или аналогичный сборщик)
 const firebaseConfig = {
-  apiKey: "AIzaSyCGqrrcKahUtg1UfOyjBisbc4e_vb49Rtg",
-  authDomain: "proj1-f8878.firebaseapp.com",
-  projectId: "proj1-f8878",
-  storageBucket: "proj1-f8878.firebasestorage.app",
-  messagingSenderId: "259555764950",
-  appId: "1:259555764950:web:d420a9945a39745f2cf777"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
