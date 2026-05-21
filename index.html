@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo-area">
+            <div>
+                <p class="subtitle">Олиневич Аглая Ильинична · Курс: 3 · Группа: 2 · 2026 год</p>
+            </div>
+        </div>
+        <div class="status-badge" id="apiStatus">
+            <span class="dot"></span> Синхронизация...
+        </div>
+    </header>
+
+    <main class="layout">
+        <aside class="sidebar">
+            <section class="nav-section">
+                <h3>Справочник</h3>
+                <select id="dictionarySelect" class="modern-select">
+                    <option value="cancer_types">Типы заболеваний</option>
+                    <option value="users">Пользователи</option>
+                </select>
+            </section>
+
+            <section class="nav-section">
+                <h3> Действия</h3>
+                <div class="action-grid">
+                    <button id="addBtn" class="btn btn-add"> Добавить</button>
+                    <button id="viewBtn" class="btn btn-info"> Просмотр</button>
+                    <button id="editBtn" class="btn btn-edit"> Изменить</button>
+                    <button id="deleteBtn" class="btn btn-danger"> Удалить</button>
+                    <button id="refreshBtn" class="btn btn-refresh"> Обновить</button>
+                </div>
+            </section>
+
+            <div class="sidebar-footer">
+                <p>Выберите запись в таблице для работы с данными</p>
+            </div>
+        </aside>
+
+        <section class="content-area">
+            <div class="table-card">
+                <div id="tableWrap"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно формы -->
+    <dialog id="recordDialog" class="modern-dialog">
+        <form method="dialog" id="recordForm">
+            <div class="dialog-header">
+                <h2 id="recordTitle">Новая запись</h2>
+                <button type="button" class="close-x" onclick="this.closest('dialog').close()">×</button>
+            </div>
+            <div id="formFields" class="form-scroll-area"></div>
+            <div class="dialog-footer">
+                <button type="button" id="cancelBtn" class="btn-text">Отмена</button>
+                <button type="submit" class="btn btn-add">Сохранить данные</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Модальное окно просмотра -->
+    <dialog id="viewDialog" class="modern-dialog view-dialog">
+        <div class="dialog-header">
+            <h2>Детальная информация</h2>
+            <button type="button" class="close-x" onclick="this.closest('dialog').close()">×</button>
+        </div>
+        <div id="viewContent" class="view-details"></div>
+        <div class="dialog-footer">
+            <button type="button" id="closeViewBtn" class="btn btn-info">Понятно</button>
+        </div>
+    </dialog>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
